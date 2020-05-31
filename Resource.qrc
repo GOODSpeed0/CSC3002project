@@ -22,12 +22,34 @@
         <file>images/loginBG.jpg</file>
         <file>images/snake.png</file>
         <file>images/data.png</file>
-        <file>images/folderIcon.png</file>
-        <file>images/diskIcon.png</file>
-        <file>images/nextIcon.png</file>
-        <file>images/backIcon.png</file>
-        <file>images/ShowFiles.png</file>
-        <file>images/OpenFile.png</file>
-        <file>images/CreateFile.png</file>
+        <file>images/blk1.bmp</file>
+        <file>images/blk2.bmp</file>
+        <file>images/blk3.bmp</file>
+        <file>images/blk4.bmp</file>
+        <file>images/blk5.bmp</file>
+        <file>images/blk6.bmp</file>
+        <file>images/blk7.bmp</file>
+        <file>images/block_close.bmp</file>
+        <file>images/block_open.bmp</file>
+        <file>images/boom.bmp</file>
+        <file>images/clickboom.bmp</file>
+        <file>images/ele0.bmp</file>
+        <file>images/ele1.bmp</file>
+        <file>images/ele2.bmp</file>
+        <file>images/ele3.bmp</file>
+        <file>images/ele4.bmp</file>
+        <file>images/ele5.bmp</file>
+        <file>images/ele6.bmp</file>
+        <file>images/ele7.bmp</file>
+        <file>images/ele8.bmp</file>
+        <file>images/ele9.bmp</file>
+        <file>images/ele10.bmp</file>
+        <file>images/keilboom.bmp</file>
+        <file>images/look.bmp</file>
+        <file>images/lose.bmp</file>
+        <file>images/proud.bmp</file>
+        <file>images/redflag.bmp</file>
+        <file>images/smile.bmp</file>
+        <file>images/字符8.bmp</file>
     </qresource>
 </RCC>

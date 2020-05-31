@@ -1,20 +1,38 @@
 #ifndef CLOCK_H
 #define CLOCK_H
+
 #include<stdio.h>
 #include<time.h>
 #include<F_code_library.h>
-//#include<windows.h>
+#include<windows.h>
 #include<iostream>
-class Clock{
-struct TimeCarrier{
-    int time_year;
-    int time_mon;
-    int time_day;
-    int time_hour;
-    int time_min;
-    int time_sec;
-};
+#include <QWidget>
+#include <QTimer>
+#include"global.h"
+
+namespace Ui {
+class Clock;
+}
+
+class Clock : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit Clock(QWidget *parent = nullptr);
+    ~Clock();
+    void start();
+    void showTime();
+    void carry();
+    void close();
+    tm recordCurrentTime();
+    inline Clock operator-(const Clock& subtractor);
+    void closeEvent(QCloseEvent *event);
+    void StoreData(int address);
+private slots:
+    void run();
 private:
+    Ui::Clock *ui;
     int time_year;
     int time_mon;
     int time_day;
@@ -24,14 +42,8 @@ private:
     bool shouleClose=false;
     string instruct;
     RAM clock;
-public:
-    void start();
-    void run();
-    void showTime();
-    void carry();
-    void close();
-    tm recordCurrentTime();
-    inline Clock operator-(const Clock& subtractor);
-
 };
+
+
+
 #endif // CLOCK_H

@@ -22,7 +22,8 @@ QMainWindow(parent),
     ui->tableView->setColumnWidth(0,200);
     ui->tableView->setColumnWidth(1,200);
     ui->tableView->setColumnWidth(2,80);
-    connect(timer,SIGNAL(timeout()),this,SLOT(update()));
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    connect(timer,SIGNAL(timeout()),this,SLOT(updateTime()));
     timer->start(1000);
 }
 
@@ -32,21 +33,39 @@ controller::~controller()
 }
 
 void controller::updateTasks(QString name,QString memory,QString runTime){
+
     model->setItem(taskNumber,0,new QStandardItem(name));
     model->setItem(taskNumber,1,new QStandardItem(memory));
     model->setItem(taskNumber,2,new QStandardItem(runTime));
     taskNumber+=1;
 }
-void controller::update(){
+void controller::updateTime(){
+    if (endSnack) {
+        deleteProcess(process_id_Snack);
+        endSnack=false;
+    }
+    if (endClock) {
+        deleteProcess(process_id_Clock);
+        endClock=false;
+    }
+    if (endMine){
+        deleteProcess(process_id_Mine);
+        endMine=false;
+    }
     for (int i=0;i<taskNumber;i++){
+        //int duration=nowTime.tm_min*60+nowTime.tm_sec-startTimes[i].tm_min*60-startTimes[i].tm_sec;
         QModelIndex index=model->index(i,2,QModelIndex());
         QString runTime=index.data().toString();
         int time=runTime.toInt();
         time+=1;
         QString nextTime=QString::number(time);
-        qDebug()<<nextTime<<endl;
         model->setItem(i,2,new QStandardItem(nextTime));
     }
+    //Update ROMUsage
+    ui->textBrowser_C->setText("C:"+QString::fromStdString(RomUsage((ana_rom[0]))));
+    ui->textBrowser_D->setText("D:"+QString::fromStdString(RomUsage((ana_rom[1]))));
+    ui->textBrowser_E->setText("E:"+QString::fromStdString(RomUsage((ana_rom[2]))));
+
 }
 void controller::paintEvent(QPaintEvent *) {
     QPainter painter(this);
@@ -65,26 +84,25 @@ void controller::paintEvent(QPaintEvent *) {
             painter.drawRect((MEM_MARGIN + MEM_BLOCK *i), MEM_MARGIN, MEM_BLOCK, MEM_BLOCK);
         }
     }
-    painter.setPen(Qt::black);
-    painter.setFont(QFont("Arial", 20));
-    painter.drawText(MEM_MARGIN - 10, MEM_MARGIN - 10, "RAM Visualization:");
-
-    painter.setPen(Qt::black);
-    painter.setFont(QFont("Arial", 20));
-    painter.drawText(MEM_MARGIN - 10, MEM_MARGIN * 2, "RAM Usage: \n" + QString::number(memory_usage(ana_ram)) + QString("%"));
     update();
 }
-void controller::keyPressEvent(QKeyEvent *event) {
-    switch (event->key()) {
-    case Qt::Key_1:
-        for (int i = 0; i < 10; i++) {
-            ana_ram[i].ram_used = 0;
+
+void controller::deleteProcess(int process_id){
+    model->removeRow(process_id);
+    for (int i=process_id+1;i<taskNumber;i++){
+        if (process_id_Mine==i){
+            process_id_Mine-=1;
         }
-        break;
-    case Qt::Key_2:
-        for (int i = 10; i < 20; i++) {
-            ana_ram[i].ram_used = 0;
+        else if (process_id_Clock==i){
+            process_id_Clock-=1;
         }
-        break;
+        else if (process_id_Snack==i){
+            process_id_Snack-=1;
+        }
+        else if (process_id_Text==i){
+            process_id_Text-=1;
+        }
     }
+    taskNumber-=1;
+
 }

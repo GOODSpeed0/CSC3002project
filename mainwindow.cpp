@@ -6,12 +6,14 @@
 #include <QStackedWidget>
 #include "Process_RAM.h"
 #include "global.h"
-#include "file_widget.h"
+#include "taskcontroller.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    systemClock.start();
+
 }
 
 MainWindow::~MainWindow()
@@ -19,40 +21,40 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//QStackedWidget * stackedwidget = new QStackedWidget;
 void MainWindow::on_actionText_Editor_triggered()
 {
     texteditor * editor = new texteditor(this);
-//    editor->show();
-//    stackedwidget->addWidget(editor);
-    task->updateTasks("Text_editor","3","0");
+    task->updateTasks("Text_editor","1","0");
+    process_id_Text=task->taskNumber-1;
     editor->show();
 }
 
 void MainWindow::on_actionSnake_triggered()
-{   if (snakeRunning != true){
-        snake_widget * snake = new snake_widget(this);
-        snakeRunning = true;
-        task->updateTasks("Snack","2","0");
-        snake->show();
-    }
+{
+    snake_widget * snake =  new snake_widget(this);
+    snakeRunning = true;
+    task->updateTasks("Snack","2","0");
+    process_id_Snack=task->taskNumber-1;
+    snake->show();
 }
 
 void MainWindow::on_actionTask_triggered() {
-    //controller * task = new controller(this);
     task->show();
-
-    cout << "test" << endl;
 }
-
-void MainWindow::on_actionOpen_triggered() {
-    file_widget *filewidget = new file_widget(this);
-    filewidget->show();
-}
-
-void MainWindow::closeEvent(QCloseEvent *event) {
-    for (int i = 0; i < 20; i++) {
-        ana_ram[i].ram_used = 0;
+void MainWindow::on_actionClock_triggered(){
+    if (!hasClock){
+        task->updateTasks("Clock","2","0");
+        process_id_Clock=task->taskNumber-1;
+        clockProcess = Process_APP(ana_ram);
+        systemClock.show();
+        hasClock=true;
     }
-    event->accept();
+    else return;
+}
+void MainWindow::on_actionMinesweeper_triggered(){
+    MineSweeper * minesweeper=new MineSweeper(this);
+    minesweeper->show();
+    mineSweeperProcess=Process_APP(ana_ram);
+    task->updateTasks("MineSweeper","2","0");
+    process_id_Mine=task->taskNumber-1;
 }
